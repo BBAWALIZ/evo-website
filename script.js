@@ -282,7 +282,15 @@
         })
         .catch(function () {
           statusEl.className = "cform__status err";
-          statusEl.textContent = t("contact.error");
+          var body = encodeURIComponent(
+            (payload.name ? "Name: " + payload.name + "\n" : "") +
+            (payload.email ? "Email: " + payload.email + "\n" : "") +
+            (payload.phone ? "Phone: " + payload.phone + "\n" : "") +
+            "\n" + (payload.message || "")
+          );
+          var mailto = "mailto:bilal@evoapp.org?cc=ibrahim@evoapp.org,dev@evoapp.org&subject=" +
+            encodeURIComponent(payload._subject) + "&body=" + body;
+          statusEl.innerHTML = t("contact.error") + ' <a href="' + mailto + '">' + t("contact.emailDirect") + "</a>";
           track("contact_error");
         })
         .finally(function () { btn.disabled = false; });
